@@ -89,14 +89,14 @@ class DownSpinner: UIView {
     // MARK: Animation
     
     fileprivate enum Animation: String {
-        case ProgressLayerStart
-        case ProgressLayerOngoing
-        case ProgressLayerEnd
+        case progressLayerStart
+        case progressLayerOngoing
+        case progressLayerEnd
         
-        case ResultColor
-        case ResultStrokeColor
-        case ResultFillColor
-        case ResultMark
+        case resultColor
+        case resultStrokeColor
+        case resultFillColor
+        case resultMark
     }
     
     private enum Duration: CFTimeInterval {
@@ -142,25 +142,17 @@ class DownSpinner: UIView {
         CATransaction.begin()
         
         switch animation {
-        case .ProgressLayerStart:
+        case .progressLayerStart:
             performStartAnimation()
-            break
-        case .ProgressLayerOngoing:
+        case .progressLayerOngoing:
             performOngoingAnimation()
-            break
-        case .ProgressLayerEnd:
+        case .progressLayerEnd:
             performEndAnimation()
-            break
             
-        case .ResultColor where result != nil:
+        case .resultColor where result != nil:
             performResultColorAnimation(result: result!)
-            break
-        case .ResultMark where result != nil:
+        case .resultMark where result != nil:
             performResultMarkAnimation(result: result!)
-            break
-            
-        default:
-            break
         }
         
         CATransaction.setCompletionBlock(completion)
@@ -218,27 +210,26 @@ class DownSpinner: UIView {
     
     // All credit for the checkmark and it's animation goes out to @Tueno's MaterialCircularProgress
     // See https://github.com/Tueno/MaterialCircularProgress/blob/master/LICENSE
-    
+
+    // swiftlint:disable identifier_name
     private var CheckmarkPath: UIBezierPath {
-        get {
-            let scaleFactor = CGFloat(5.0)
-            let size  = CGSize(width: bounds.width / scaleFactor, height: bounds.height / scaleFactor)
-            let path = UIBezierPath()
-            
-            let startPoint = CGPoint(x: bounds.midX - size.width / 2,
-                                     y: bounds.midY)
-            path.move(to: startPoint)
-            
-            let firstLineEndPoint = CGPoint(x: startPoint.x + size.width * 0.36,
-                                            y: startPoint.y + size.height * 0.36)
-            path.addLine(to: firstLineEndPoint)
-            
-            let secondLineEndPoint = CGPoint(x: firstLineEndPoint.x + size.width * 0.64,
-                                             y: firstLineEndPoint.y - size.height)
-            path.addLine(to: secondLineEndPoint)
-            
-            return path
-        }
+        let scaleFactor = CGFloat(5.0)
+        let size  = CGSize(width: bounds.width / scaleFactor, height: bounds.height / scaleFactor)
+        let path = UIBezierPath()
+
+        let startPoint = CGPoint(x: bounds.midX - size.width / 2,
+                                 y: bounds.midY)
+        path.move(to: startPoint)
+
+        let firstLineEndPoint = CGPoint(x: startPoint.x + size.width * 0.36,
+                                        y: startPoint.y + size.height * 0.36)
+        path.addLine(to: firstLineEndPoint)
+
+        let secondLineEndPoint = CGPoint(x: firstLineEndPoint.x + size.width * 0.64,
+                                         y: firstLineEndPoint.y - size.height)
+        path.addLine(to: secondLineEndPoint)
+
+        return path
     }
     
     private let resultLayer = CAShapeLayer()
@@ -247,7 +238,7 @@ class DownSpinner: UIView {
         var color = UIColor.clear
         switch result {
         case .success:
-            color = UIColor(red:0.30, green:0.84, blue:0.13, alpha:1.00)
+            color = UIColor(red: 0.30, green: 0.84, blue: 0.13, alpha: 1.00)
         }
         
         return color
@@ -320,15 +311,14 @@ extension CALayer {
 }
 
 extension Double {
-    static var pi_2: Double {
+    static var pi2: Double {
         return .pi / 2
     }
     
-    static var pi_4: Double {
+    static var pi4: Double {
         return .pi / 4
     }
 }
-
 
 let view = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 400))
 view.backgroundColor = UIColor.darkGray.withAlphaComponent(0.2)
@@ -344,7 +334,7 @@ PlaygroundPage.current.liveView = view
 NSLog("Reloaded on %@", NSDate())
 
 DispatchQueue.global().asyncAfter(deadline: .now()) {
-    while(true) {
+    while true {
         NSLog("Starting on %@", NSDate())
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             spinner.startAnimation()
